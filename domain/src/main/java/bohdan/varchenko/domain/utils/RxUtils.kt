@@ -14,12 +14,10 @@ fun <T> Observable<DataWrapper<T>>.handleNoInternetConnection(
                 Observable.just(DataWrapper.error(NoInternetConnection())),
                 internetObserver.observeNetworkState()
                     .filter { it }
-                    .flatMap { retry() }
+                    .flatMap { retry(1) }
             )
-
         } else {
             Observable.error(th)
         }
     }
-
 }
