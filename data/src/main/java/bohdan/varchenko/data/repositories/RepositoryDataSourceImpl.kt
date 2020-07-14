@@ -1,0 +1,35 @@
+package bohdan.varchenko.data.repositories
+
+import bohdan.varchenko.domain.datasource.RepositoryDataSource
+import bohdan.varchenko.domain.models.Repository
+import bohdan.varchenko.domain.models.SearchQuery
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+
+class RepositoryDataSourceImpl : RepositoryDataSource {
+
+    override fun search(
+        name: String,
+        page: Int,
+        count: Int,
+        orderDescending: Boolean
+    ): Single<List<Repository>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getRecentSearch(): Observable<List<SearchQuery>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun insertNewRecentSearch(name: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateRecentSearch(updatedSearch: SearchQuery) {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteRecentSearch(query: SearchQuery) {
+        TODO("Not yet implemented")
+    }
+}

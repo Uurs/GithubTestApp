@@ -1,0 +1,47 @@
+final versions = [
+        junit                : '4.12',
+        junit_ext            : '1.1.1',
+        test_core            : '1.2.0',
+        android_test_runner  : '1.2.0',
+        android_espresso_core: '3.2.0',
+        mockito_core         : '3.1.0',
+        mockito_kotlin2      : '2.2.0',
+        mockk                : '1.9.3.kotlin12',
+        "androidx_test_ext"  : "1.1.1"
+]
+
+final junit = "junit:junit:${versions.junit}"
+final junit_ext = "androidx.test.ext:junit:${versions.junit_ext}"
+final test_core = "androidx.test:core:${versions.test_core}"
+final android_test_runner = "androidx.test:runner:${versions.android_test_runner}"
+final android_espresso_core = "androidx.test.espresso:espresso-core:${versions.android_espresso_core}"
+final mockito_core = "org.mockito:mockito-core:${versions.mockito_core}"
+final mockito_kotlin2 = "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockito_kotlin2}"
+final mockk = "io.mockk:mockk:${versions.mockk}"
+
+final androidx_test_ext = "androidx.test.ext:junit:${versions.androidx_test_ext}"
+
+def general = [
+        junit,
+        junit_ext,
+        test_core,
+        android_test_runner,
+        android_espresso_core,
+        mockito_core,
+        mockito_kotlin2,
+        mockk
+]
+
+ext {
+    domainTestDependencies = general
+
+    dataTestDependencies = general
+    dataAndroidTestDependencies = general + [
+            androidx_test_ext,
+    ]
+
+    appTestDependencies = general
+    appAndroidTestDependencies = general + [
+            androidx_test_ext,
+    ]
+}
