@@ -1,5 +1,6 @@
 package bohdan.varchenko.data.di.local
 
+import bohdan.varchenko.data.local.UserStorage
 import bohdan.varchenko.data.local.dao.RepositoryDao
 import bohdan.varchenko.data.local.dao.SearchQueryDao
 import bohdan.varchenko.data.remote.RepositoryApi
@@ -11,7 +12,8 @@ import javax.inject.Scope
 @Subcomponent(
     modules = [
         ApiModule::class,
-        DaoModule::class
+        DaoModule::class,
+        UserStorageModule::class
     ]
 )
 abstract class RepositorySubComponent {
@@ -23,6 +25,8 @@ abstract class RepositorySubComponent {
     internal abstract fun repositoryDao(): RepositoryDao
 
     internal abstract fun searchQueryDao(): SearchQueryDao
+
+    internal abstract fun userStorage(): UserStorage
 
     @Subcomponent.Builder
     interface Builder{

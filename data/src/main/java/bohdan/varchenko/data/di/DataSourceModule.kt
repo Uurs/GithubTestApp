@@ -35,7 +35,9 @@ open class DataSourceModule {
 
     @Provides
     fun provideUserDataSource(component: RepositorySubComponent): UserDataSource {
-        val userApi = component.userApi()
-        return UserDataSourceImpl(userApi)
+        return UserDataSourceImpl(
+            userApi = component.userApi(),
+            userStorage = component.userStorage()
+        )
     }
 }

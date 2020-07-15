@@ -8,7 +8,7 @@ import bohdan.varchenko.data.local.AppDatabase.Companion.TABLE_SEARCH_QUERY
 @Entity(
     tableName = TABLE_SEARCH_QUERY
 )
-data class SearchQueryEntity(
+internal data class SearchQueryEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = ID) val id: Long = 0,
     @ColumnInfo(name = TEXT) val text: String,
     @ColumnInfo(name = ORDER_POSITION) val orderPosition: Int

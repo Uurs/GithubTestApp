@@ -21,7 +21,7 @@ internal class RepositoryDataSourceImplTest {
         val repo = getRepositoryDataSource()
         repo.getRecentSearch()
             .test()
-            .assertValue(emptyList<SearchQuery>())
+            .assertValue(emptyList())
             .assertNoErrors()
 
         verify(searchQueryDao, times(1)).getAll()
