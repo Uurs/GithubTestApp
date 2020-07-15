@@ -8,8 +8,8 @@ import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.usecases.RepositoryUseCase
 import bohdan.varchenko.domain.utils.handleNoInternetConnection
 import bohdan.varchenko.domain.wrap
-import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 class RepositorySearchUseCase
@@ -22,20 +22,20 @@ class RepositorySearchUseCase
         name: String,
         page: Int,
         orderDescending: Boolean
-    ): Observable<DataWrapper<List<Repository>>> {
-        return Completable.fromAction {
+    ): Single<DataWrapper<List<Repository>>> {
+        return Single.fromCallable {
             dataSource.insertNewRecentSearch(name)
         }
-            .andThen(
+            .flatMap {
                 dataSource.search(
-                    name,
+                    it,
                     page,
                     SearchConfig.SEARCH_RESULTS_PER_PAGE,
                     orderDescending
                 )
-            )
+
+            }
             .map { it.wrap() }
-            .toObservable()
             .handleNoInternetConnection(internetObserver)
     }
 }

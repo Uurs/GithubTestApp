@@ -7,6 +7,7 @@ import bohdan.varchenko.domain.datasource.RepositoryDataSource
 import bohdan.varchenko.domain.datasource.UserDataSource
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module(
     subcomponents = [
@@ -15,10 +16,21 @@ import dagger.Provides
 )
 open class DataSourceModule {
 
+    @Singleton
+    @Provides
+    fun providesRepositorySubComponent(
+        builder: RepositorySubComponent.Builder
+    ): RepositorySubComponent {
+        return builder.build()
+    }
+
     @Provides
     fun provideRepositoryDataSource(component: RepositorySubComponent): RepositoryDataSource {
-        val repositoryApi = component.repositoryApi()
-        return RepositoryDataSourceImpl(repositoryApi)
+        return RepositoryDataSourceImpl(
+            api = component.repositoryApi(),
+            searchQueryDao = component.searchQueryDao(),
+            repositoryDao = component.repositoryDao()
+        )
     }
 
     @Provides

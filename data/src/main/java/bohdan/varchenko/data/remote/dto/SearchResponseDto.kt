@@ -3,7 +3,7 @@ package bohdan.varchenko.data.remote.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class SearchResponseDto(
+internal data class SearchResponseDto(
     @JsonProperty("incomplete_results")
     val incompleteResults: Boolean,
     @JsonProperty("items")
@@ -12,7 +12,7 @@ data class SearchResponseDto(
     val totalCount: Int
 )
 
-data class SearchResponseItemDto(
+internal data class SearchResponseItemDto(
     @JsonProperty("created_at")
     val createdAt: String,
     @JsonProperty("default_branch")
@@ -61,7 +61,7 @@ data class SearchResponseItemDto(
     val watchersCount: Int
 )
 
-data class SearchResponseOwnerDto(
+internal data class SearchResponseOwnerDto(
     @JsonProperty("avatar_url")
     val avatarUrl: String,
     @JsonProperty("gravatar_id")

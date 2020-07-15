@@ -10,6 +10,8 @@ internal interface RepositoryApi {
     @GET(ENDPOINT_SEARCH)
     fun search(
         @Query("q") q: String,
+        @Query("page") page: Int,
+        @Query("per_page") count: Int,
         @Query("sort") sort: String,
         @Query("order") orderBy: String
     ): Single<SearchResponseDto>

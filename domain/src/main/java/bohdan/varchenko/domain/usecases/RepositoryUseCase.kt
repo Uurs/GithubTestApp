@@ -4,12 +4,12 @@ import bohdan.varchenko.domain.DataWrapper
 import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.models.SearchQuery
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 
 interface RepositoryUseCase {
 
     interface GetRecentSearch {
-        fun execute(): Observable<List<SearchQuery>>
+        fun execute(): Single<List<SearchQuery>>
     }
 
     interface RemoveRecentSearch {
@@ -25,6 +25,6 @@ interface RepositoryUseCase {
             name: String,
             page: Int,
             orderDescending: Boolean
-        ): Observable<DataWrapper<List<Repository>>>
+        ): Single<DataWrapper<List<Repository>>>
     }
 }

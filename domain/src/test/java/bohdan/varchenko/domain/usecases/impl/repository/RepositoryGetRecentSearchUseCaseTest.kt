@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import org.junit.Test
 
 internal class RepositoryGetRecentSearchUseCaseTest :
@@ -14,7 +14,7 @@ internal class RepositoryGetRecentSearchUseCaseTest :
 
     @Test
     fun `positive flow`() = block<Dto> {
-        whenever(dataSource.getRecentSearch()) doReturn Observable.just(emptyList())
+        whenever(dataSource.getRecentSearch()) doReturn Single.just(emptyList())
 
         useCase.execute()
             .test()
@@ -26,7 +26,7 @@ internal class RepositoryGetRecentSearchUseCaseTest :
     @Test
     fun `negative flow`() = block<Dto> {
         whenever(dataSource.getRecentSearch()) doReturn
-                Observable.error(Exception())
+                Single.error(Exception())
 
         useCase.execute()
             .test()

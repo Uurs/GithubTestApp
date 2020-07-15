@@ -12,11 +12,11 @@ internal class RepositoryUpdateRecentSearchPositionUseCaseTest: BaseUseCaseTest(
 
     @Test
     fun `positive flow`() = block<Dto> {
-        useCase.execute(SearchQuery("#", 1), 2)
+        useCase.execute(SearchQuery(0, "#", 1), 2)
             .test()
             .assertNoErrors()
 
-        verify(dataSource, times(1)).updateRecentSearch(SearchQuery("#", 2))
+        verify(dataSource, times(1)).updateRecentSearch(SearchQuery(0, "#", 2))
     }
 
     private data class Dto(

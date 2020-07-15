@@ -10,7 +10,7 @@ internal class RepositoryRemoveRecentSearchUseCaseTest : BaseUseCaseTest() {
 
     @Test
     fun `positive flow`()  = block<Dto> {
-        useCase.execute(SearchQuery("name", 0))
+        useCase.execute(SearchQuery(0, "name", 0))
             .test()
             .assertNoErrors()
         verify(dataSource, times(1)).deleteRecentSearch(any())

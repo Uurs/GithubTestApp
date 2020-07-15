@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import org.junit.Test
 import java.io.FileNotFoundException
 
@@ -19,16 +20,14 @@ class RxUtilsTest {
                 Observable.just(false, true)
 
         var i = 0
-        Observable.create<DataWrapper<Int>> { emitter ->
-            if (i == 0) emitter.onError(NoInternetConnection())
-            else emitter.onNext(DataWrapper.from(i))
-            i++
+        Single.create<DataWrapper<Int>> { emitter ->
+            if (i++ == 0) emitter.onError(NoInternetConnection())
+            else emitter.onSuccess(DataWrapper.from(i))
         }
             .handleNoInternetConnection(internetObserver)
             .test()
-            .awaitCount(2)
-            .assertValueAt(0) { it.isEmpty() && it.error is NoInternetConnection }
-            .assertValueAt(1, DataWrapper.from(1))
+            .assertValueAt(0, DataWrapper.from(2))
+            .assertNoErrors()
     }
 
     @Test
@@ -38,10 +37,9 @@ class RxUtilsTest {
                 Observable.just(false, true)
 
         var i = 0
-        Observable.create<DataWrapper<Int>> { emitter ->
-            if (i == 0) emitter.onError(FileNotFoundException())
-            else emitter.onNext(DataWrapper.from(i))
-            i++
+        Single.create<DataWrapper<Int>> { emitter ->
+            if (i++ == 0) emitter.onError(FileNotFoundException())
+            else emitter.onSuccess(DataWrapper.from(i))
         }
             .handleNoInternetConnection(internetObserver)
             .test()

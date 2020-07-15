@@ -3,21 +3,20 @@ package bohdan.varchenko.domain.utils
 import bohdan.varchenko.domain.DataWrapper
 import bohdan.varchenko.domain.devicecontract.InternetObserver
 import bohdan.varchenko.domain.exceptions.NoInternetConnection
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 
-fun <T> Observable<DataWrapper<T>>.handleNoInternetConnection(
+fun <T> Single<DataWrapper<T>>.handleNoInternetConnection(
     internetObserver: InternetObserver
-): Observable<DataWrapper<T>> {
+): Single<DataWrapper<T>> {
     return onErrorResumeNext { th ->
         if (th is NoInternetConnection) {
-            Observable.merge(
-                Observable.just(DataWrapper.error(NoInternetConnection())),
-                internetObserver.observeNetworkState()
-                    .filter { it }
-                    .flatMap { retry(1) }
-            )
+            internetObserver.observeNetworkState()
+                .filter { it }
+                .firstOrError()
+                .flatMap { retry(1) }
+
         } else {
-            Observable.error(th)
+            Single.error(th)
         }
     }
 }

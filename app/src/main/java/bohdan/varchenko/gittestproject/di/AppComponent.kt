@@ -8,7 +8,9 @@ import bohdan.varchenko.domain.di.UserUseCaseModule
 import bohdan.varchenko.gittestproject.di.modules.ApplicationContextModule
 import bohdan.varchenko.gittestproject.di.modules.ViewModelModule
 import dagger.Component
+import javax.inject.Singleton
 
+@Singleton
 @Component(
     modules = [
         UserUseCaseModule::class,
