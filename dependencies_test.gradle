@@ -8,7 +8,8 @@ final versions = [
         "mockito_kotlin2"      : '2.2.0',
         "mockk"                : '1.10.0',
         "androidx_test_ext"    : "1.1.1",
-        "room_version"         : "2.2.5"
+        "room_version"         : "2.2.5",
+        "mock_webserver"       : "4.2.2"
 ]
 
 final junit = "junit:junit:${versions.junit}"
@@ -21,6 +22,7 @@ final mockito_kotlin2 = "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.m
 final mockk = "io.mockk:mockk:${versions.mockk}"
 final androidx_room_testing = "androidx.room:room-testing:${versions.room_version}"
 final kotlin_reflect = "org.jetbrains.kotlin:kotlin-reflect:+"
+final mock_webserver = "com.squareup.okhttp3:mockwebserver:${versions.mock_webserver}"
 
 final androidx_test_ext = "androidx.test.ext:junit:${versions.androidx_test_ext}"
 
@@ -43,6 +45,7 @@ ext {
     dataAndroidTestDependencies = general + [
             androidx_test_ext,
             androidx_room_testing,
+            mock_webserver
     ]
 
     appTestDependencies = general

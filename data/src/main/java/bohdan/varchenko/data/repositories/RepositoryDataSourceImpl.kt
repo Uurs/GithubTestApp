@@ -4,16 +4,18 @@ import bohdan.varchenko.data.local.dao.RepositoryDao
 import bohdan.varchenko.data.local.dao.SearchQueryDao
 import bohdan.varchenko.data.local.entities.SearchQueryEntity
 import bohdan.varchenko.data.mappers.toRepository
-import bohdan.varchenko.data.mappers.toRepositoryEntity
 import bohdan.varchenko.data.mappers.toSearchQuery
 import bohdan.varchenko.data.mappers.toSearchQueryEntity
 import bohdan.varchenko.data.remote.RepositoryApi
 import bohdan.varchenko.data.remote.dto.SearchResponseDto
+import bohdan.varchenko.domain.SearchConfig
+import bohdan.varchenko.domain.SearchConfig.DEFAULT_SORT_BY
+import bohdan.varchenko.domain.SearchConfig.ORDER_ASC
+import bohdan.varchenko.domain.SearchConfig.ORDER_DESC
 import bohdan.varchenko.domain.datasource.RepositoryDataSource
 import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.models.SearchQuery
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -31,35 +33,40 @@ internal class RepositoryDataSourceImpl
         orderDescending: Boolean
     ): Single<List<Repository>> {
         val queryRequest = createQuery(query)
+        val order = if (orderDescending) ORDER_DESC else ORDER_ASC
         return Single.zip(
-            api.search(
-                q = queryRequest,
-                page = page * 2,
-                count = count / 2,
-                sort = "star",
-                orderBy = if (orderDescending) "desc" else "asc"
+            generateRequests(
+                queryRequest,
+                page,
+                count,
+                DEFAULT_SORT_BY,
+                order
             )
-                .subscribeOn(Schedulers.io()),
-            api.search(
-                q = queryRequest,
-                page = page * 2 + 1,
-                count = count / 2,
-                sort = "star",
-                orderBy = if (orderDescending) "desc" else "asc"
-            )
-                .subscribeOn(Schedulers.io()),
-            BiFunction { t1: SearchResponseDto, t2: SearchResponseDto ->
-                t1.searchResponseItemDtos + t2.searchResponseItemDtos
+        ) { response ->
+            response.mapNotNull { dto -> (dto as? SearchResponseDto) }
+                .let { dto ->
+                    if (orderDescending)
+                        dto.sortedByDescending {
+                            it.searchResponseItemDtos.last().stargazersCount
+                        }
+                    else
+                        dto.sortedBy {
+                            it.searchResponseItemDtos.last().stargazersCount
+                        }
+                }
+                .map { it.searchResponseItemDtos }
+                .flatten()
+                .map { dto -> dto.toRepository() }
+        }
+            .onErrorResumeNext {
+                Single.fromCallable {
+                    repositoryDao.recoverRecentSearch(query.id, page * count, count)
+                        .map { it.toRepository() }
+                }
             }
-        )
-            .map { response -> response.map { it.toRepository() } }
             .doOnSuccess { list ->
                 if (list.isNotEmpty())
-                    repositoryDao.insert(list.map { it.toRepositoryEntity() })
-            }
-            .onErrorReturn {
-                repositoryDao.search(query.text, page * count, count)
-                    .map { it.toRepository() }
+                    repositoryDao.insertNewSearchResult(query, list)
             }
     }
 
@@ -81,6 +88,31 @@ internal class RepositoryDataSourceImpl
     override fun deleteRecentSearch(query: SearchQuery) {
         searchQueryDao.delete(query.id)
     }
+
+    private fun generateRequests(
+        query: String,
+        page: Int,
+        count: Int,
+        sort: String,
+        orderBy: String
+    ): List<Single<SearchResponseDto>> {
+        val initialRequestPage = page * SearchConfig.MAX_THREAD_COUNT
+        val requestCount = count / SearchConfig.MAX_THREAD_COUNT
+        return (0 until SearchConfig.MAX_THREAD_COUNT).map {
+            val requestPage = initialRequestPage + it
+            getRequest(query, requestPage, requestCount, sort, orderBy)
+        }
+    }
+
+    private fun getRequest(
+        query: String,
+        page: Int,
+        count: Int,
+        sort: String,
+        orderBy: String
+    ): Single<SearchResponseDto> =
+        api.search(query, page , count, sort, orderBy)
+            .subscribeOn(Schedulers.io())
 
     private fun createQuery(query: SearchQuery): String {
         return query.text.split(" ").let {

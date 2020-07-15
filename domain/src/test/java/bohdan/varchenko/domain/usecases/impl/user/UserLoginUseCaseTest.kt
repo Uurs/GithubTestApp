@@ -13,7 +13,7 @@ internal class UserLoginUseCaseTest : BaseUseCaseTest() {
 
     @Test
     fun `positive flow`() = block<Dto> {
-        whenever(dataSource.login(any(), any())) doReturn Single.just(User("id"))
+        whenever(dataSource.login(any(), any())) doReturn Single.just(User("id", "", "", ""))
         useCase.execute("name", "password")
             .test()
             .assertNoErrors()

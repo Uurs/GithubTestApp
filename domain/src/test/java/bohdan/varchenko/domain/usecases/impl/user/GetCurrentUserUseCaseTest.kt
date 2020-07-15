@@ -12,7 +12,7 @@ internal class GetCurrentUserUseCaseTest : BaseUseCaseTest() {
 
     @Test
     fun `positive flow`() = block<Dto> {
-        whenever(dataSource.getCurrentUser()) doReturn Single.just(User("id"))
+        whenever(dataSource.getCurrentUser()) doReturn Single.just(User("id", "", "", ""))
         useCase.execute()
             .test()
             .assertNoErrors()

@@ -1,28 +1,67 @@
 package bohdan.varchenko.data.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import bohdan.varchenko.data.local.AppDatabase
 import bohdan.varchenko.data.local.entities.RepositoryEntity
+import bohdan.varchenko.data.local.entities.SearchQueryRepositoryEntity
+import bohdan.varchenko.data.mappers.toRepositoryEntity
+import bohdan.varchenko.domain.models.Repository
+import bohdan.varchenko.domain.models.SearchQuery
 
 @Dao
-internal interface RepositoryDao {
+internal abstract class RepositoryDao(private val database: AppDatabase) {
 
     @Query(
         """
-            SELECT * FROM ${AppDatabase.TABLE_REPOSITORIES} 
-            WHERE ${RepositoryEntity.NAME} LIKE '%' || :name || '%'
+            SELECT * FROM ${AppDatabase.TABLE_REPOSITORIES}
+            WHERE ${RepositoryEntity.NAME} LIKE '%' || :name || '%' COLLATE NOCASE
+            ORDER BY ${RepositoryEntity.STARS} DESC
             LIMIT :count
             OFFSET :offset
         """
     )
-    fun search(name: String, offset: Int, count: Int): List<RepositoryEntity>
+    abstract fun localSearch(name: String, offset: Int, count: Int): List<RepositoryEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(repositories: List<RepositoryEntity>)
+    abstract fun insert(repositories: List<RepositoryEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    abstract fun insert(entity: SearchQueryRepositoryEntity)
+
+    @Transaction
+    open fun insertNewSearchResult(
+        searchQuery: SearchQuery,
+        repositories: List<Repository>
+    ) {
+        insert(repositories.map { it.toRepositoryEntity() })
+        repositories.forEach {
+            insert(
+                SearchQueryRepositoryEntity(
+                    searchQueryId = searchQuery.id,
+                    repositoryId = it.id
+                )
+            )
+        }
+    }
+
+    @Query(
+        """
+        SELECT * FROM ${AppDatabase.TABLE_REPOSITORIES} 
+        WHERE ${RepositoryEntity.ID} in (
+            SELECT ${SearchQueryRepositoryEntity.REPOSITORY_ID} FROM ${AppDatabase.TABLE_SEARCH_QUERY_REPOSITORY}
+            WHERE ${SearchQueryRepositoryEntity.SEARCH_QUERY_ID} = :searchId
+        ) 
+            ORDER BY ${RepositoryEntity.STARS} DESC
+            LIMIT :count
+            OFFSET :offset
+    """
+    )
+    abstract fun recoverRecentSearch(
+        searchId: Long,
+        offset: Int,
+        count: Int
+    ): List<RepositoryEntity>
 
     @Query("SELECT * FROM ${AppDatabase.TABLE_REPOSITORIES}")
-    fun getAll(): List<RepositoryEntity>
+    abstract fun getAll(): List<RepositoryEntity>
 }

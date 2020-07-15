@@ -2,7 +2,6 @@ package bohdan.varchenko.domain.datasource
 
 import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.models.SearchQuery
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 
 interface RepositoryDataSource {

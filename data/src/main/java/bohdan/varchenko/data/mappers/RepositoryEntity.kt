@@ -12,5 +12,6 @@ internal fun Repository.toRepositoryEntity(): RepositoryEntity =
         ownerId = ownerId,
         ownerName = ownerName,
         ownerAvatarUrl = ownerAvatarUrl,
-        isViewed = isViewed
+        isViewed = isViewed,
+        stars = stars.toLong()
     )

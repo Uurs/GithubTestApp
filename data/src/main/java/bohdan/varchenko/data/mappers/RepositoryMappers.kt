@@ -12,8 +12,9 @@ internal fun SearchResponseItemDto.toRepository(): Repository =
         htmlUrl = htmlUrl,
         ownerId = owner.id,
         ownerName = owner.login,
-        ownerAvatarUrl = owner.avatarUrl,
-        isViewed = false
+        ownerAvatarUrl = owner.avatar_url,
+        isViewed = false,
+        stars = stargazersCount
     )
 
 internal fun RepositoryEntity.toRepository(): Repository =
@@ -25,5 +26,6 @@ internal fun RepositoryEntity.toRepository(): Repository =
         ownerId = ownerId,
         ownerName = ownerName,
         ownerAvatarUrl = ownerAvatarUrl,
-        isViewed = isViewed
+        isViewed = isViewed,
+        stars = stars.toInt()
     )
