@@ -24,9 +24,7 @@ class RxUtilsTest {
             else emitter.onNext(DataWrapper.from(i))
             i++
         }
-            .let {
-                it.handleNoInternetConnection(internetObserver)
-            }
+            .handleNoInternetConnection(internetObserver)
             .test()
             .awaitCount(2)
             .assertValueAt(0) { it.isEmpty() && it.error is NoInternetConnection }
@@ -45,9 +43,7 @@ class RxUtilsTest {
             else emitter.onNext(DataWrapper.from(i))
             i++
         }
-            .let {
-                it.handleNoInternetConnection(internetObserver)
-            }
+            .handleNoInternetConnection(internetObserver)
             .test()
             .assertNoValues()
             .assertError(FileNotFoundException::class.java)

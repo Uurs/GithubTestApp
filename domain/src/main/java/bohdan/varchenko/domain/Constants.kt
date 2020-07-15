@@ -7,3 +7,7 @@ object SearchConfig {
 
     const val SEARCH_CAPACITY_PER_THREAD = 15
 }
+
+object Requests {
+    const val BASE_URL = ""
+}

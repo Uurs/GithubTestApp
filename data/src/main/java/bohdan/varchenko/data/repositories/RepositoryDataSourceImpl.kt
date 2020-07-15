@@ -5,8 +5,12 @@ import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.models.SearchQuery
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
+import javax.inject.Inject
 
-class RepositoryDataSourceImpl : RepositoryDataSource {
+internal class RepositoryDataSourceImpl
+@Inject constructor(
+
+) : RepositoryDataSource {
 
     override fun search(
         name: String,
