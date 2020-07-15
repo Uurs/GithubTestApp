@@ -1,5 +1,6 @@
 package bohdan.varchenko.data.di.local
 
+import bohdan.varchenko.data.remote.RepositoryApi
 import bohdan.varchenko.data.remote.UserApi
 import bohdan.varchenko.domain.Requests
 import dagger.Module
@@ -22,5 +23,10 @@ internal open class ApiModule {
     @Provides
     fun provideUserApi(): UserApi {
         return retrofit.create(UserApi::class.java)
+    }
+
+    @Provides
+    fun provideRepositoryApi(): RepositoryApi {
+        return retrofit.create(RepositoryApi::class.java)
     }
 }

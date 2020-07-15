@@ -16,8 +16,9 @@ import dagger.Provides
 open class DataSourceModule {
 
     @Provides
-    fun provideRepositoryDataSource(): RepositoryDataSource {
-        return RepositoryDataSourceImpl()
+    fun provideRepositoryDataSource(component: RepositorySubComponent): RepositoryDataSource {
+        val repositoryApi = component.repositoryApi()
+        return RepositoryDataSourceImpl(repositoryApi)
     }
 
     @Provides

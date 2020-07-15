@@ -1,5 +1,6 @@
 package bohdan.varchenko.data.di.local
 
+import bohdan.varchenko.data.remote.RepositoryApi
 import bohdan.varchenko.data.remote.UserApi
 import dagger.Subcomponent
 
@@ -11,6 +12,8 @@ import dagger.Subcomponent
 abstract class RepositorySubComponent {
 
     internal abstract fun userApi(): UserApi
+
+    internal abstract fun repositoryApi(): RepositoryApi
 
     @Subcomponent.Builder
     interface Builder{

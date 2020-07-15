@@ -1,5 +1,6 @@
 package bohdan.varchenko.data.repositories
 
+import bohdan.varchenko.data.remote.RepositoryApi
 import bohdan.varchenko.domain.datasource.RepositoryDataSource
 import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.models.SearchQuery
@@ -9,7 +10,7 @@ import javax.inject.Inject
 
 internal class RepositoryDataSourceImpl
 @Inject constructor(
-
+    private val api: RepositoryApi
 ) : RepositoryDataSource {
 
     override fun search(
