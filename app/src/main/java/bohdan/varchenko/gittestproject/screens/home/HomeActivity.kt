@@ -1,11 +1,14 @@
 package bohdan.varchenko.gittestproject.screens.home
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import bohdan.varchenko.gittestproject.R
 import bohdan.varchenko.gittestproject.base.BaseActivity
-import bohdan.varchenko.gittestproject.screens.repositorylist.SearchRepositoryFragment
+import bohdan.varchenko.gittestproject.screens.profile.ProfileFragment
+import bohdan.varchenko.gittestproject.screens.searchrepository.SearchRepositoryFragment
+import kotlinx.android.synthetic.main.activity_home.*
 
-class HomeActivity : BaseActivity<HomeViewModel>() {
+internal class HomeActivity : BaseActivity<HomeViewModel>() {
 
     override val layoutResource: Int
         get() = R.layout.activity_home
@@ -18,9 +21,14 @@ class HomeActivity : BaseActivity<HomeViewModel>() {
         viewModel.subscribeForEvents(this) { onEvent(it) }
         viewModel.subscribeForState(this) { renderState(it) }
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.flContent, SearchRepositoryFragment())
-            .commit()
+        bnvHome.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu_search -> showRecentSearchScreen()
+                R.id.menu_profile -> showProfileScreen()
+            }
+            true
+        }
+        bnvHome.selectedItemId = R.id.menu_profile
     }
 
     private fun renderState(state: HomeViewModel.State) {
@@ -29,5 +37,19 @@ class HomeActivity : BaseActivity<HomeViewModel>() {
 
     private fun onEvent(event: HomeViewModel.Event) {
 
+    }
+
+    fun showProfileScreen() {
+        showScreen(ProfileFragment())
+    }
+
+    fun showRecentSearchScreen() {
+        showScreen(SearchRepositoryFragment())
+    }
+
+    private fun showScreen(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.flContent, fragment)
+            .commit()
     }
 }

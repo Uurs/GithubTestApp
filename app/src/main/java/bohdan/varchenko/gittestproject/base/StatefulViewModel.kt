@@ -3,11 +3,13 @@ package bohdan.varchenko.gittestproject.base
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.PublishSubject
 
 abstract class StatefulViewModel<State, Event> : BaseViewModel() {
     protected val stateLiveData = MutableLiveData<State>()
     private val eventSubject = PublishSubject.create<Event>()
+    private var eventsDisposable: Disposable? = null
     protected val state: State
         get() = stateLiveData.value!!
 
@@ -22,7 +24,8 @@ abstract class StatefulViewModel<State, Event> : BaseViewModel() {
         lifecycleOwner: LifecycleOwner,
         callback: (Event) -> Unit
     ) {
-        eventSubject.subscribe { callback(it) }
+        eventsDisposable?.dispose()
+        eventsDisposable = eventSubject.subscribe { callback(it) }
             .cache()
     }
 

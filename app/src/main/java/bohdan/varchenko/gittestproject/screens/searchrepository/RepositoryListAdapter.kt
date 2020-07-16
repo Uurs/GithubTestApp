@@ -1,4 +1,4 @@
-package bohdan.varchenko.gittestproject.screens.repositorylist
+package bohdan.varchenko.gittestproject.screens.searchrepository
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

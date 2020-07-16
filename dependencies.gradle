@@ -1,16 +1,23 @@
 final versions = [
-        "rxjava"                : "3.0.0",
-        "retrofit"              : '2.9.0',
-        "retrofit_rx"           : '2.9.0',
-        "retrofit_jackson"      : '2.9.0',
-        "jackson"               : "2.11.1",
-        "androidx_core"         : "1.3.0",
-        "androidx_appcompat"    : "1.1.0",
-        "android_arch_ext"      : "1.1.0",
-        "android_arch_viewmodel": "1.1.0",
-        "room_version"          : "2.2.5",
-        'okhttp' : "3.4.1"
+        "dagger2"                  : "2.28.1",
+        "rxjava"                   : "3.0.0",
+        "retrofit"                 : '2.9.0',
+        "retrofit_rx"              : '2.9.0',
+        "retrofit_jackson"         : '2.9.0',
+        "jackson"                  : "2.11.1",
+        "androidx_core"            : "1.3.0",
+        "androidx_appcompat"       : "1.1.0",
+        "android_arch_ext"         : "1.1.0",
+        "android_arch_viewmodel"   : "1.1.0",
+        "room_version"             : "2.2.5",
+        'okhttp'                   : "3.4.1",
+        "material"                 : "1.1.0",
+        "androidx_constraintlayout": "1.1.3",
+        "glide"                    : "4.11.0",
+        "lottie"                   : "3.4.1"
 ]
+
+final kotlin_std = "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 final inject = "javax.inject:javax.inject:1"
 final rxJava = "io.reactivex.rxjava3:rxandroid:${versions.rxjava}"
@@ -29,15 +36,23 @@ final android_arch_viewmodel = "android.arch.lifecycle:viewmodel:${versions.andr
 final androidx_room = "androidx.room:room-runtime:${versions.room_version}"
 final androidx_room_rxjava = "androidx.room:room-rxjava2:${versions.room_version}"
 
+final material = "com.google.android.material:material:${versions.material}"
+final androidx_constraintlayout = "androidx.constraintlayout:constraintlayout:${versions.androidx_constraintlayout}"
+final glide = "com.github.bumptech.glide:glide:${versions.glide}"
+final lottie = "com.airbnb.android:lottie:$versions.lottie"
+
 ext {
     room_version = versions.room_version
+    dagger = versions.dagger2
 
     domainDependencies = [
+            kotlin_std,
             rxJava,
             inject,
     ]
 
     dataDependencies = [
+            kotlin_std,
             androidx_core,
             retrofit,
             rxRetrofit,
@@ -47,16 +62,21 @@ ext {
             rxJava,
             androidx_room,
             androidx_room_rxjava,
-            okhttp3_okhttp_urlconnection
+            okhttp3_okhttp_urlconnection,
     ]
 
     appDependencies = [
+            kotlin_std,
             rxJava,
             rxAndroid,
             inject,
             androidx_core,
             androidx_appcompat,
             android_arch_ext,
-            android_arch_viewmodel
+            android_arch_viewmodel,
+            material,
+            androidx_constraintlayout,
+            glide,
+            lottie,
     ]
 }

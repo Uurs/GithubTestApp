@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import bohdan.varchenko.gittestproject.core.ViewModelFactory
 import bohdan.varchenko.gittestproject.screens.home.HomeViewModel
-import bohdan.varchenko.gittestproject.screens.repositorylist.SearchRepositoryViewModel
+import bohdan.varchenko.gittestproject.screens.profile.ProfileViewModel
+import bohdan.varchenko.gittestproject.screens.searchrepository.SearchRepositoryViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -12,7 +13,7 @@ import dagger.multibindings.IntoMap
 import kotlin.reflect.KClass
 
 @Module
-interface ViewModelModule {
+internal interface ViewModelModule {
 
     @Binds
     fun bindViewModelFactory(
@@ -28,6 +29,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(SearchRepositoryViewModel::class)
     fun bindRepositoryListViewModel(viewModel: SearchRepositoryViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ProfileViewModel::class)
+    fun bindProfileViewModel(viewModel: ProfileViewModel): ViewModel
 
     @MustBeDocumented
     @Target(

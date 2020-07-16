@@ -5,7 +5,7 @@ import bohdan.varchenko.domain.usecases.RepositoryUseCase
 import bohdan.varchenko.gittestproject.base.StatefulViewModel
 import javax.inject.Inject
 
-class HomeViewModel
+internal class HomeViewModel
 @Inject constructor(
     private val getRecentSearch: RepositoryUseCase.GetRecentSearch
 ) : StatefulViewModel<HomeViewModel.State, HomeViewModel.Event>() {

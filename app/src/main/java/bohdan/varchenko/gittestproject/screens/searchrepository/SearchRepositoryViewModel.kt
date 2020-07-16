@@ -1,4 +1,4 @@
-package bohdan.varchenko.gittestproject.screens.repositorylist
+package bohdan.varchenko.gittestproject.screens.searchrepository
 
 import bohdan.varchenko.domain.SearchConfig.SEARCH_RESULTS_PER_PAGE
 import bohdan.varchenko.domain.models.Repository
@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
-class SearchRepositoryViewModel
+internal class SearchRepositoryViewModel
 @Inject constructor(
     private val searchUseCase: RepositoryUseCase.Search,
     private val markAsViewedUseCase: RepositoryUseCase.MarkAsViewed
