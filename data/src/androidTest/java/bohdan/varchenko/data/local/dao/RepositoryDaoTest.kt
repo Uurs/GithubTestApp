@@ -9,6 +9,7 @@ import bohdan.varchenko.data.local.entities.SearchQueryEntity
 import bohdan.varchenko.data.mappers.toRepository
 import bohdan.varchenko.data.mappers.toSearchQuery
 import bohdan.varchenko.domain.models.Repository
+import junit.framework.Assert.assertEquals
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -146,7 +147,7 @@ internal class RepositoryDaoTest {
     @Test
     fun recoverRecentSearchTest() {
         val database = createDatabase(context)
-        val repositories = (0..5)
+        val repositories = (0..100)
             .map { it.toLong() }
             .map {
                 Repository(
@@ -173,5 +174,30 @@ internal class RepositoryDaoTest {
             repositories,
             repo.recoverRecentSearch(searchQuery.id, 0, 100).map { it.toRepository() }
         )
+    }
+
+    @Test
+    fun markAsViewedTest() {
+        val database = createDatabase(context)
+        val repositories = (0..5)
+            .map { it.toLong() }
+            .map {
+                RepositoryEntity(
+                    it,
+                    "name_$it",
+                    "description_$it",
+                    "html_$it",
+                    it,
+                    "owner_$it",
+                    "avatar_$it",
+                    false,
+                    1000 - it
+                )
+            }
+        with(database.getRepositoryDao()) {
+            insert(repositories)
+            markRepositoryAsViewed(0, true)
+            assertEquals(1, getAll().filter { it.isViewed }.size)
+        }
     }
 }
