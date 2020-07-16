@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GitTestProject</string>
+    <string name="fragment_repository_search_input_hint">Type what you want to search</string>
+    <string name="common_image_content_description_author_avatar">Author Avatar</string>
+    <string name="common_image_content_description_viewed_indicator">Is the repository viewed</string>
+    <string name="common_image_content_descriptor_stars_count">Repository Stars Count</string>
+    <string name="common_image_content_description_start_search">Start Search</string>
 </resources>
