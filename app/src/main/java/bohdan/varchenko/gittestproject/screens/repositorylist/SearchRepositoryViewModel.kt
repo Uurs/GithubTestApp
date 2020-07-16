@@ -15,22 +15,26 @@ class SearchRepositoryViewModel
 ) : StatefulViewModel<SearchRepositoryViewModel.State, SearchRepositoryViewModel.Event>() {
 
     init {
-        putState(State(false, "", emptyList()))
+        putState(State(false, "", emptyList(), 0))
     }
 
     fun newSearch(searchText: String) {
         if (state.loading) return
-        updateState { copy(lastSearch = searchText, loading = true, list = emptyList()) }
+        updateState {
+            copy(
+                lastSearch = searchText,
+                loading = true,
+                list = emptyList(),
+                currentPage = 0
+            )
+        }
         searchUseCase.execute(searchText, 0, true)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnEvent { _, _ -> updateState { copy(loading = false) } }
             .subscribe(
                 { updateState { copy(list = list + (it.data ?: emptyList())) } },
-                {
-                    postEvent(Event.FailedToLoadRepositories)
-                    it.printStackTrace()
-                }
+                { postEvent(Event.FailedToLoadRepositories) }
             )
             .cache()
     }
@@ -53,14 +57,24 @@ class SearchRepositoryViewModel
     }
 
     fun loadMore(currentPosition: Int) {
-        if (currentPosition < state.currentPage * SEARCH_RESULTS_PER_PAGE + SEARCH_RESULTS_PER_PAGE)
-            return
+        if (currentPosition < state.currentPage * SEARCH_RESULTS_PER_PAGE
+            + SEARCH_RESULTS_PER_PAGE / 2
+            || state.loading
+        ) return
+        updateState { copy(loading = true) }
         searchUseCase.execute(state.lastSearch, state.currentPage + 1, true)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnEvent { _, _ -> updateState { copy(loading = false) } }
+            .doAfterTerminate { updateState { copy(loading = false) } }
             .subscribe(
-                { updateState { copy(list = list + (it.data ?: emptyList())) } },
+                {
+                    updateState {
+                        copy(
+                            list = list + (it.data ?: emptyList()),
+                            currentPage = currentPage + 1
+                        )
+                    }
+                },
                 { postEvent(Event.FailedToLoadRepositories) }
             )
             .cache()
@@ -70,7 +84,7 @@ class SearchRepositoryViewModel
         val loading: Boolean,
         val lastSearch: String,
         val list: List<Repository>,
-        val currentPage: Int = 0
+        val currentPage: Int
     )
 
     sealed class Event {

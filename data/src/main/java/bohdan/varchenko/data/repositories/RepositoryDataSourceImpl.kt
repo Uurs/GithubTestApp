@@ -108,7 +108,7 @@ internal class RepositoryDataSourceImpl
         val requestCount = count / SearchConfig.MAX_THREAD_COUNT
         return (0 until SearchConfig.MAX_THREAD_COUNT).map {
             val requestPage = initialRequestPage + it
-            getRequest(query, requestPage, requestCount, sort, orderBy)
+            getRequest(query, requestPage + 1, requestCount, sort, orderBy)
         }
     }
 
