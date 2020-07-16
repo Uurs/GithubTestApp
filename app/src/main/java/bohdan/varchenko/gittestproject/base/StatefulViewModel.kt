@@ -26,6 +26,10 @@ abstract class StatefulViewModel<State, Event> : BaseViewModel() {
             .cache()
     }
 
+    protected fun putState(state: State) {
+        stateLiveData.value = state
+    }
+
     protected fun updateState(mapper: State.() -> State) {
         stateLiveData.value?.run {
             stateLiveData.postValue(this.mapper())

@@ -62,6 +62,14 @@ internal abstract class RepositoryDao(private val database: AppDatabase) {
         count: Int
     ): List<RepositoryEntity>
 
+    @Query(
+        """
+            UPDATE ${AppDatabase.TABLE_REPOSITORIES} SET ${RepositoryEntity.IS_VIEWED} = :isViewed
+            WHERE ${RepositoryEntity.ID} = :repositoryId
+        """
+    )
+    abstract fun markRepositoryAsViewed(repositoryId: Long, isViewed: Boolean)
+
     @Query("SELECT * FROM ${AppDatabase.TABLE_REPOSITORIES}")
     abstract fun getAll(): List<RepositoryEntity>
 }

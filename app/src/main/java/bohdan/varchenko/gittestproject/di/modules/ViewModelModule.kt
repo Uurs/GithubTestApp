@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import bohdan.varchenko.gittestproject.core.ViewModelFactory
 import bohdan.varchenko.gittestproject.screens.home.HomeViewModel
+import bohdan.varchenko.gittestproject.screens.repositorylist.RepositoryListViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -22,6 +23,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(HomeViewModel::class)
     fun bindHomeViewModel(viewModel: HomeViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RepositoryListViewModel::class)
+    fun bindRepositoryListViewModel(viewModel: RepositoryListViewModel): ViewModel
 
     @MustBeDocumented
     @Target(

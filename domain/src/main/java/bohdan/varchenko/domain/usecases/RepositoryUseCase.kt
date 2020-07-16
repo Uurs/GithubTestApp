@@ -27,4 +27,8 @@ interface RepositoryUseCase {
             orderDescending: Boolean
         ): Single<DataWrapper<List<Repository>>>
     }
+
+    interface MarkAsViewed {
+        fun execute(repository: Repository): Completable
+    }
 }

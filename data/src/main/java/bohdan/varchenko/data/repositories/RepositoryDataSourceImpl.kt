@@ -15,6 +15,7 @@ import bohdan.varchenko.domain.SearchConfig.ORDER_DESC
 import bohdan.varchenko.domain.datasource.RepositoryDataSource
 import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.models.SearchQuery
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
@@ -68,6 +69,12 @@ internal class RepositoryDataSourceImpl
                 if (list.isNotEmpty())
                     repositoryDao.insertNewSearchResult(query, list)
             }
+    }
+
+    override fun markAsRead(repositoryId: Long): Completable {
+        return Completable.fromAction {
+            repositoryDao.markRepositoryAsViewed(repositoryId, true)
+        }
     }
 
     override fun getRecentSearch(): Single<List<SearchQuery>> {

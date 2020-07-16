@@ -2,7 +2,6 @@ package bohdan.varchenko.data.local.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import bohdan.varchenko.data.local.AppDatabase.Companion.TABLE_SEARCH_QUERY
 

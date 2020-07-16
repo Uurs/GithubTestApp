@@ -3,6 +3,7 @@ package bohdan.varchenko.gittestproject.screens.home
 import android.os.Bundle
 import bohdan.varchenko.gittestproject.R
 import bohdan.varchenko.gittestproject.base.BaseActivity
+import bohdan.varchenko.gittestproject.screens.repositorylist.RepositoryListFragment
 
 class HomeActivity : BaseActivity<HomeViewModel>() {
 
@@ -16,6 +17,10 @@ class HomeActivity : BaseActivity<HomeViewModel>() {
         super.onCreate(savedInstanceState)
         viewModel.subscribeForEvents(this) { onEvent(it) }
         viewModel.subscribeForState(this) { renderState(it) }
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.flContent, RepositoryListFragment())
+            .commit()
     }
 
     private fun renderState(state: HomeViewModel.State) {

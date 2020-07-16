@@ -2,6 +2,7 @@ package bohdan.varchenko.domain.datasource
 
 import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.models.SearchQuery
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 
 interface RepositoryDataSource {
@@ -12,6 +13,8 @@ interface RepositoryDataSource {
         count: Int,
         orderDescending: Boolean
     ): Single<List<Repository>>
+
+    fun markAsRead(repositoryId: Long): Completable
 
     fun getRecentSearch(): Single<List<SearchQuery>>
 

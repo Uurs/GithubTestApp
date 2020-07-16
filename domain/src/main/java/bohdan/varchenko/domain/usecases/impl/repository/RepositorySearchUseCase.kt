@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
-class RepositorySearchUseCase
+internal class RepositorySearchUseCase
 @Inject constructor(
     private val dataSource: RepositoryDataSource,
     private val internetObserver: InternetObserver
