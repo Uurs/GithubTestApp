@@ -25,7 +25,7 @@ internal data class SearchResponseItemDto(
     @JsonProperty("homepage") val homepage: String?,
     @JsonProperty("html_url") val htmlUrl: String,
     @JsonProperty("id") val id: Long,
-    @JsonProperty("language") val language: String,
+    @JsonProperty("language") val language: String?,
     @JsonProperty("master_branch") val masterBranch: String?,
     @JsonProperty("name") val name: String,
     @JsonProperty("node_id") val nodeId: String,

@@ -27,16 +27,16 @@
             tools:text="some repository name" />
 
         <TextView
-            style="@style/Text.Item.Common"
             android:id="@+id/tvRepositoryDescription"
+            style="@style/Text.Item.Common"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:maxLines="2"
             android:layout_marginEnd="8dp"
+            android:maxLines="2"
+            app:layout_constraintEnd_toStartOf="@+id/ivAuthorAvatar"
             app:layout_constraintStart_toStartOf="@+id/tvRepositoryName"
             app:layout_constraintTop_toBottomOf="@+id/tvRepositoryName"
-            app:layout_constraintEnd_toStartOf="@+id/ivAuthorAvatar"
             tools:text="some repository description. Long line. What is Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book it has?" />
 
         <ImageView
@@ -54,12 +54,12 @@
             android:id="@+id/ivViewedIndicator"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_viewed"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:contentDescription="@string/common_image_content_description_viewed_indicator"
+            android:src="@drawable/ic_viewed"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/common_image_content_description_viewed_indicator" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/tvRepositoryStars"
@@ -68,20 +68,21 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/ivRepositoryStars"
-            app:layout_constraintTop_toTopOf="@+id/ivRepositoryStars"
             app:layout_constraintStart_toEndOf="@+id/ivRepositoryStars"
-            tools:text="20000"/>
+            app:layout_constraintTop_toTopOf="@+id/ivRepositoryStars"
+            tools:text="20000" />
 
         <ImageView
             android:id="@+id/ivRepositoryStars"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/common_image_content_descriptor_stars_count"
             android:src="@drawable/ic_stars"
-            android:contentDescription="@string/common_image_content_descriptor_stars_count" />
+            android:tint="@color/gold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

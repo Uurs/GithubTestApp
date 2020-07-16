@@ -71,4 +71,14 @@ class SearchQueryDaoTest {
         val dao = database.getSearchQueryDao()
         dao.delete(100)
     }
+
+    @Test
+    fun testSeveralAddSameName() {
+        val database = createDatabase(context)
+        val dao = database.getSearchQueryDao()
+        val searchQuery = SearchQueryEntity(text = "123", orderPosition = 0)
+        dao.insert(searchQuery)
+        dao.insert(searchQuery)
+        assertEquals(1, dao.getAll().size)
+    }
 }

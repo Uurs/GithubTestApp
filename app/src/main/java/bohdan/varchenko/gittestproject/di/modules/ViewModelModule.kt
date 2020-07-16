@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import bohdan.varchenko.gittestproject.core.ViewModelFactory
 import bohdan.varchenko.gittestproject.screens.home.HomeViewModel
-import bohdan.varchenko.gittestproject.screens.repositorylist.RepositoryListViewModel
+import bohdan.varchenko.gittestproject.screens.repositorylist.SearchRepositoryViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -26,8 +26,8 @@ interface ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(RepositoryListViewModel::class)
-    fun bindRepositoryListViewModel(viewModel: RepositoryListViewModel): ViewModel
+    @ViewModelKey(SearchRepositoryViewModel::class)
+    fun bindRepositoryListViewModel(viewModel: SearchRepositoryViewModel): ViewModel
 
     @MustBeDocumented
     @Target(

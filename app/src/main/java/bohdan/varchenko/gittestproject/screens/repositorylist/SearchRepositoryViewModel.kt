@@ -1,5 +1,6 @@
 package bohdan.varchenko.gittestproject.screens.repositorylist
 
+import bohdan.varchenko.domain.SearchConfig.SEARCH_RESULTS_PER_PAGE
 import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.usecases.RepositoryUseCase
 import bohdan.varchenko.gittestproject.base.StatefulViewModel
@@ -7,11 +8,11 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
-class RepositoryListViewModel
+class SearchRepositoryViewModel
 @Inject constructor(
     private val searchUseCase: RepositoryUseCase.Search,
     private val markAsViewedUseCase: RepositoryUseCase.MarkAsViewed
-) : StatefulViewModel<RepositoryListViewModel.State, RepositoryListViewModel.Event>() {
+) : StatefulViewModel<SearchRepositoryViewModel.State, SearchRepositoryViewModel.Event>() {
 
     init {
         putState(State(false, "", emptyList()))
@@ -26,7 +27,10 @@ class RepositoryListViewModel
             .doOnEvent { _, _ -> updateState { copy(loading = false) } }
             .subscribe(
                 { updateState { copy(list = list + (it.data ?: emptyList())) } },
-                { postEvent(Event.FailedToLoadRepositories) }
+                {
+                    postEvent(Event.FailedToLoadRepositories)
+                    it.printStackTrace()
+                }
             )
             .cache()
     }
@@ -48,10 +52,25 @@ class RepositoryListViewModel
             .cache()
     }
 
+    fun loadMore(currentPosition: Int) {
+        if (currentPosition < state.currentPage * SEARCH_RESULTS_PER_PAGE + SEARCH_RESULTS_PER_PAGE)
+            return
+        searchUseCase.execute(state.lastSearch, state.currentPage + 1, true)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnEvent { _, _ -> updateState { copy(loading = false) } }
+            .subscribe(
+                { updateState { copy(list = list + (it.data ?: emptyList())) } },
+                { postEvent(Event.FailedToLoadRepositories) }
+            )
+            .cache()
+    }
+
     data class State(
         val loading: Boolean,
         val lastSearch: String,
-        val list: List<Repository>
+        val list: List<Repository>,
+        val currentPage: Int = 0
     )
 
     sealed class Event {

@@ -21,4 +21,7 @@ internal interface SearchQueryDao {
 
     @Query("SELECT * FROM ${AppDatabase.TABLE_SEARCH_QUERY} WHERE ${SearchQueryEntity.ID} = :id")
     fun getById(id: Long) : SearchQueryEntity?
+
+    @Query("SELECT * FROM ${AppDatabase.TABLE_SEARCH_QUERY} WHERE ${SearchQueryEntity.TEXT} = :text")
+    fun getByText(text: String) : SearchQueryEntity?
 }

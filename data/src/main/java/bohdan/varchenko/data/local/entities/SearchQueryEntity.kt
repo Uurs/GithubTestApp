@@ -2,11 +2,16 @@ package bohdan.varchenko.data.local.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import bohdan.varchenko.data.local.AppDatabase.Companion.TABLE_SEARCH_QUERY
+import bohdan.varchenko.data.local.entities.SearchQueryEntity.Companion.TEXT
 
 @Entity(
-    tableName = TABLE_SEARCH_QUERY
+    tableName = TABLE_SEARCH_QUERY,
+    indices = [
+        Index(TEXT, unique = true)
+    ]
 )
 internal data class SearchQueryEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = ID) val id: Long = 0,

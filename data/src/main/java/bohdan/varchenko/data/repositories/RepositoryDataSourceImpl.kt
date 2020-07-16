@@ -8,6 +8,7 @@ import bohdan.varchenko.data.mappers.toSearchQuery
 import bohdan.varchenko.data.mappers.toSearchQueryEntity
 import bohdan.varchenko.data.remote.RepositoryApi
 import bohdan.varchenko.data.remote.dto.SearchResponseDto
+import bohdan.varchenko.domain.DataWrapper
 import bohdan.varchenko.domain.SearchConfig
 import bohdan.varchenko.domain.SearchConfig.DEFAULT_SORT_BY
 import bohdan.varchenko.domain.SearchConfig.ORDER_ASC
@@ -15,6 +16,7 @@ import bohdan.varchenko.domain.SearchConfig.ORDER_DESC
 import bohdan.varchenko.domain.datasource.RepositoryDataSource
 import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.models.SearchQuery
+import bohdan.varchenko.domain.wrap
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -43,32 +45,31 @@ internal class RepositoryDataSourceImpl
                 DEFAULT_SORT_BY,
                 order
             )
-        ) { response ->
-            response.mapNotNull { dto -> (dto as? SearchResponseDto) }
-                .let { dto ->
-                    if (orderDescending)
-                        dto.sortedByDescending {
-                            it.searchResponseItemDtos.last().stargazersCount
-                        }
-                    else
-                        dto.sortedBy {
-                            it.searchResponseItemDtos.last().stargazersCount
-                        }
+        ) { rawData ->
+            val wrappers = rawData.mapNotNull { it as? DataWrapper<SearchResponseDto> }
+            wrappers.find { it.error != null }
+                ?.error
+                ?.run { throw this }
+            wrappers.mapNotNull { it.data?.searchResponseItemDtos }
+                .forEach { dto ->
+                    dto.map { it.toRepository() }
+                        .run { repositoryDao.insertNewSearchResult(query, this) }
                 }
-                .map { it.searchResponseItemDtos }
-                .flatten()
-                .map { dto -> dto.toRepository() }
+            searchLocal(query, page, count)
+
         }
-            .onErrorResumeNext {
-                Single.fromCallable {
-                    repositoryDao.recoverRecentSearch(query.id, page * count, count)
-                        .map { it.toRepository() }
-                }
+            .onErrorReturn {
+                searchLocal(query, page, count)
             }
-            .doOnSuccess { list ->
-                if (list.isNotEmpty())
-                    repositoryDao.insertNewSearchResult(query, list)
-            }
+    }
+
+    private fun searchLocal(
+        query: SearchQuery,
+        page: Int,
+        count: Int
+    ) : List<Repository>{
+        return repositoryDao.recoverRecentSearch(query.id, page * count, count)
+            .map { it.toRepository() }
     }
 
     override fun markAsRead(repositoryId: Long): Completable {
@@ -84,8 +85,8 @@ internal class RepositoryDataSourceImpl
     }
 
     override fun insertNewRecentSearch(name: String): SearchQuery {
-        val id = searchQueryDao.insert(SearchQueryEntity(text = name, orderPosition = 0))
-        return searchQueryDao.getById(id)!!.toSearchQuery()
+        searchQueryDao.insert(SearchQueryEntity(text = name, orderPosition = 0))
+        return searchQueryDao.getByText(name)?.toSearchQuery()!!
     }
 
     override fun updateRecentSearch(updatedSearch: SearchQuery) {
@@ -102,7 +103,7 @@ internal class RepositoryDataSourceImpl
         count: Int,
         sort: String,
         orderBy: String
-    ): List<Single<SearchResponseDto>> {
+    ): List<Single<DataWrapper<SearchResponseDto>>> {
         val initialRequestPage = page * SearchConfig.MAX_THREAD_COUNT
         val requestCount = count / SearchConfig.MAX_THREAD_COUNT
         return (0 until SearchConfig.MAX_THREAD_COUNT).map {
@@ -117,9 +118,11 @@ internal class RepositoryDataSourceImpl
         count: Int,
         sort: String,
         orderBy: String
-    ): Single<SearchResponseDto> =
+    ): Single<DataWrapper<SearchResponseDto>> =
         api.search(query, page , count, sort, orderBy)
             .subscribeOn(Schedulers.io())
+            .map { it.wrap() }
+            .onErrorReturn { DataWrapper.error(it) }
 
     private fun createQuery(query: SearchQuery): String {
         return query.text.split(" ").let {

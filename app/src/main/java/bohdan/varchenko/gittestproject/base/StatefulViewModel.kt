@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer
 import io.reactivex.rxjava3.subjects.PublishSubject
 
 abstract class StatefulViewModel<State, Event> : BaseViewModel() {
-    private val stateLiveData = MutableLiveData<State>()
+    protected val stateLiveData = MutableLiveData<State>()
     private val eventSubject = PublishSubject.create<Event>()
     protected val state: State
         get() = stateLiveData.value!!
@@ -30,9 +30,9 @@ abstract class StatefulViewModel<State, Event> : BaseViewModel() {
         stateLiveData.value = state
     }
 
-    protected fun updateState(mapper: State.() -> State) {
+    protected inline fun updateState(mapper: State.() -> State) {
         stateLiveData.value?.run {
-            stateLiveData.postValue(this.mapper())
+            stateLiveData.value = this.mapper()
         }
     }
 

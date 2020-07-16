@@ -97,6 +97,16 @@ internal class IntegrationRepositoryDataSourceImplTest {
             .assertValue { it.isEmpty() }
             .assertNoErrors()
     }
+    @Test
+    fun testSearchNegativeFlowNoInternetConnection2() {
+        mockWebServer.shutdown()
+        
+        repository.search(SearchQuery(0, "tetris", 0), 0, 30, true)
+            .test()
+            .await()
+            .assertValue { it.isEmpty() }
+            .assertNoErrors()
+    }
 
     @Test
     fun testSearchSecondRequestFailed() {

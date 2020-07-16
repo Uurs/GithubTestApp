@@ -3,7 +3,7 @@ package bohdan.varchenko.gittestproject.screens.home
 import android.os.Bundle
 import bohdan.varchenko.gittestproject.R
 import bohdan.varchenko.gittestproject.base.BaseActivity
-import bohdan.varchenko.gittestproject.screens.repositorylist.RepositoryListFragment
+import bohdan.varchenko.gittestproject.screens.repositorylist.SearchRepositoryFragment
 
 class HomeActivity : BaseActivity<HomeViewModel>() {
 
@@ -19,7 +19,7 @@ class HomeActivity : BaseActivity<HomeViewModel>() {
         viewModel.subscribeForState(this) { renderState(it) }
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.flContent, RepositoryListFragment())
+            .replace(R.id.flContent, SearchRepositoryFragment())
             .commit()
     }
 
