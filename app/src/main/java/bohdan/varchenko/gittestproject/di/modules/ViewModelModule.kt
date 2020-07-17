@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import bohdan.varchenko.gittestproject.core.ViewModelFactory
 import bohdan.varchenko.gittestproject.screens.home.HomeViewModel
 import bohdan.varchenko.gittestproject.screens.profile.ProfileViewModel
+import bohdan.varchenko.gittestproject.screens.recentsearchlist.RecentSearchViewModel
 import bohdan.varchenko.gittestproject.screens.searchrepository.SearchRepositoryViewModel
 import dagger.Binds
 import dagger.MapKey
@@ -34,6 +35,11 @@ internal interface ViewModelModule {
     @IntoMap
     @ViewModelKey(ProfileViewModel::class)
     fun bindProfileViewModel(viewModel: ProfileViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RecentSearchViewModel::class)
+    fun bindRecentSearchViewModel(viewModel: RecentSearchViewModel): ViewModel
 
     @MustBeDocumented
     @Target(

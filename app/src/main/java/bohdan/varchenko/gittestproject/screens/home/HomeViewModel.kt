@@ -1,18 +1,6 @@
 package bohdan.varchenko.gittestproject.screens.home
 
-import bohdan.varchenko.domain.models.SearchQuery
-import bohdan.varchenko.domain.usecases.RepositoryUseCase
-import bohdan.varchenko.gittestproject.base.StatefulViewModel
+import bohdan.varchenko.gittestproject.base.BaseViewModel
 import javax.inject.Inject
 
-internal class HomeViewModel
-@Inject constructor(
-    private val getRecentSearch: RepositoryUseCase.GetRecentSearch
-) : StatefulViewModel<HomeViewModel.State, HomeViewModel.Event>() {
-
-    data class State(
-        val recentSearchList: List<SearchQuery>
-    )
-
-    sealed class Event
-}
+internal class HomeViewModel @Inject constructor() : BaseViewModel()

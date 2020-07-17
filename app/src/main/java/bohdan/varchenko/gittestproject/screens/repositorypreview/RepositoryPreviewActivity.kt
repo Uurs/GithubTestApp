@@ -5,16 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import androidx.appcompat.app.AppCompatActivity
 import bohdan.varchenko.gittestproject.R
+import bohdan.varchenko.gittestproject.base.AbsActivity
 import bohdan.varchenko.gittestproject.utils.views.gone
 import kotlinx.android.synthetic.main.activity_repository_preview.*
 
-internal class RepositoryPreviewActivity : AppCompatActivity() {
+internal class RepositoryPreviewActivity : AbsActivity() {
+    override val layoutResource: Int
+        get() = R.layout.activity_repository_preview
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_repository_preview)
         webview.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
