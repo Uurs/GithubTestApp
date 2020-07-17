@@ -52,7 +52,10 @@ internal class SearchRepositoryViewModel
                     })
                 }
             }
-            .subscribe { postEvent(Event.OpenRepositoryDetails(repository)) }
+            .subscribe(
+                { postEvent(Event.OpenRepositoryDetails(repository)) },
+                { postEvent(Event.FailedToOpenRepository) }
+            )
             .cache()
     }
 
@@ -68,11 +71,15 @@ internal class SearchRepositoryViewModel
             .doAfterTerminate { updateState { copy(loading = false) } }
             .subscribe(
                 {
-                    updateState {
-                        copy(
-                            list = list + (it.data ?: emptyList()),
-                            currentPage = currentPage + 1
-                        )
+                    if (it.error != null) {
+                        postEvent(Event.FailedToLoadRepositories)
+                    }  else {
+                        updateState {
+                            copy(
+                                list = list + (it.data ?: emptyList()),
+                                currentPage = currentPage + 1
+                            )
+                        }
                     }
                 },
                 { postEvent(Event.FailedToLoadRepositories) }
@@ -90,5 +97,6 @@ internal class SearchRepositoryViewModel
     sealed class Event {
         data class OpenRepositoryDetails(val repository: Repository) : Event()
         object FailedToLoadRepositories : Event()
+        object FailedToOpenRepository: Event()
     }
 }
