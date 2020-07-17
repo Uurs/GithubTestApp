@@ -9,7 +9,8 @@ final versions = [
         "mockk"                : '1.10.0',
         "androidx_test_ext"    : "1.1.1",
         "room_version"         : "2.2.5",
-        "mock_webserver"       : "4.2.2"
+        "mock_webserver"       : "4.2.2",
+        androidx_arch_core      : '2.1.0',
 ]
 
 final junit = "junit:junit:${versions.junit}"
@@ -17,6 +18,7 @@ final junit_ext = "androidx.test.ext:junit:${versions.junit_ext}"
 final test_core = "androidx.test:core:${versions.test_core}"
 final android_test_runner = "androidx.test:runner:${versions.android_test_runner}"
 final android_espresso_core = "androidx.test.espresso:espresso-core:${versions.android_espresso_core}"
+final androidx_arch_core = "androidx.arch.core:core-testing:${versions.androidx_arch_core}"
 final mockito_core = "org.mockito:mockito-core:${versions.mockito_core}"
 final mockito_kotlin2 = "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockito_kotlin2}"
 final mockk = "io.mockk:mockk:${versions.mockk}"
@@ -48,7 +50,9 @@ ext {
             mock_webserver
     ]
 
-    appTestDependencies = general
+    appTestDependencies = general + [
+            androidx_arch_core
+    ]
     appAndroidTestDependencies = general + [
             androidx_test_ext,
     ]
