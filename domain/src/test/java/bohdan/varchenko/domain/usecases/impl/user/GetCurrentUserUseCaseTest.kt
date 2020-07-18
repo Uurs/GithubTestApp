@@ -1,6 +1,7 @@
 package bohdan.varchenko.domain.usecases.impl.user
 
 import bohdan.varchenko.domain.BaseUseCaseTest
+import bohdan.varchenko.domain.DataWrapper
 import bohdan.varchenko.domain.datasource.UserDataSource
 import bohdan.varchenko.domain.models.User
 import com.nhaarman.mockitokotlin2.doReturn
@@ -12,9 +13,10 @@ internal class GetCurrentUserUseCaseTest : BaseUseCaseTest() {
 
     @Test
     fun `positive flow`() = block<Dto> {
-        whenever(dataSource.getCurrentUser()) doReturn Single.just(User("id", "", "", ""))
+        whenever(dataSource.getCurrentUser()) doReturn Single.just(User(100L, "id", "", ""))
         useCase.execute()
             .test()
+            .assertValue(DataWrapper.from(User(100L, "id", "", "")))
             .assertNoErrors()
     }
 
@@ -23,7 +25,8 @@ internal class GetCurrentUserUseCaseTest : BaseUseCaseTest() {
         whenever(dataSource.getCurrentUser()) doReturn Single.error(Exception())
         useCase.execute()
             .test()
-            .assertError(Throwable::class.java)
+            .assertNoErrors()
+            .assertValue { it.isEmpty() && it.error is Exception }
     }
 
     private data class Dto(

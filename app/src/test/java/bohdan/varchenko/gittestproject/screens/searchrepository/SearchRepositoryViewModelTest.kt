@@ -4,20 +4,29 @@ import bohdan.varchenko.domain.DataWrapper
 import bohdan.varchenko.domain.SearchConfig.SEARCH_RESULTS_PER_PAGE
 import bohdan.varchenko.domain.exceptions.NoInternetConnection
 import bohdan.varchenko.domain.models.Repository
+import bohdan.varchenko.domain.models.User
 import bohdan.varchenko.domain.usecases.RepositoryUseCase
 import bohdan.varchenko.domain.usecases.UserUseCase
+import bohdan.varchenko.domain.wrap
 import bohdan.varchenko.gittestproject.BaseViewModelTest
 import bohdan.varchenko.gittestproject.toObservableEvents
 import bohdan.varchenko.gittestproject.toObservableState
 import com.nhaarman.mockitokotlin2.*
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
+import org.junit.Before
 import org.junit.Test
 
 class SearchRepositoryViewModelTest : BaseViewModelTest() {
     private val searchUseCase: RepositoryUseCase.Search = mock()
     private val markAsViewedUseCase: RepositoryUseCase.MarkAsViewed = mock()
     private val getCurrentUser: UserUseCase.GetCurrentUser = mock()
+
+    @Before
+    fun setupMocks() {
+        whenever(getCurrentUser.execute()) doReturn
+                Single.just(User(100, "123", "123", "123").wrap())
+    }
 
     private fun getViewModel(): SearchRepositoryViewModel = SearchRepositoryViewModel(
         searchUseCase = searchUseCase,
@@ -50,10 +59,10 @@ class SearchRepositoryViewModelTest : BaseViewModelTest() {
         viewModel.newSearch("123")
 
         stateObservable.assertNoErrors()
-            .assertValueAt(0, SearchRepositoryViewModel.State(false, "", emptyList(), 0))
-            .assertValueAt(1, SearchRepositoryViewModel.State(true, "123", emptyList(), 0))
-            .assertValueAt(2, SearchRepositoryViewModel.State(false, "123", emptyList(), 0))
-            .assertValueAt(3, SearchRepositoryViewModel.State(false, "123", repositories, 0))
+            .assertValueAt(0, SearchRepositoryViewModel.State(false, "", emptyList(), 0, true))
+            .assertValueAt(1, SearchRepositoryViewModel.State(true, "123", emptyList(), 0, true))
+            .assertValueAt(2, SearchRepositoryViewModel.State(false, "123", emptyList(), 0, true))
+            .assertValueAt(3, SearchRepositoryViewModel.State(false, "123", repositories, 0, true))
 
         verify(searchUseCase, times(1)).execute("123", 0, true)
     }
@@ -70,9 +79,9 @@ class SearchRepositoryViewModelTest : BaseViewModelTest() {
         viewModel.newSearch("123")
 
         stateObservable.assertNoErrors()
-            .assertValueAt(0, SearchRepositoryViewModel.State(false, "", emptyList(), 0))
-            .assertValueAt(1, SearchRepositoryViewModel.State(true, "123", emptyList(), 0))
-            .assertValueAt(2, SearchRepositoryViewModel.State(false, "123", emptyList(), 0))
+            .assertValueAt(0, SearchRepositoryViewModel.State(false, "", emptyList(), 0, true))
+            .assertValueAt(1, SearchRepositoryViewModel.State(true, "123", emptyList(), 0, true))
+            .assertValueAt(2, SearchRepositoryViewModel.State(false, "123", emptyList(), 0, true))
 
         eventsObservable.assertValueAt(0, SearchRepositoryViewModel.Event.FailedToLoadRepositories)
         verify(searchUseCase, times(1)).execute("123", 0, true)
@@ -109,7 +118,8 @@ class SearchRepositoryViewModelTest : BaseViewModelTest() {
                 false,
                 "123",
                 listOf(repository.copy(isViewed = true)),
-                0
+                0,
+                true
             )
         )
 
@@ -196,15 +206,15 @@ class SearchRepositoryViewModelTest : BaseViewModelTest() {
         stateObservable
             .assertValueAt(
                 4,
-                SearchRepositoryViewModel.State(true, "123", repositories1, 0)
+                SearchRepositoryViewModel.State(true, "123", repositories1, 0, true)
             )
             .assertValueAt(
                 5,
-                SearchRepositoryViewModel.State(true, "123", repositories1 + repositories2, 1)
+                SearchRepositoryViewModel.State(true, "123", repositories1 + repositories2, 1, true)
             )
             .assertValueAt(
                 6,
-                SearchRepositoryViewModel.State(false, "123", repositories1 + repositories2, 1)
+                SearchRepositoryViewModel.State(false, "123", repositories1 + repositories2, 1, true)
             )
         eventsObservable.assertNoValues()
             .assertNoErrors()
@@ -244,11 +254,11 @@ class SearchRepositoryViewModelTest : BaseViewModelTest() {
         stateObservable
             .assertValueAt(
                 4,
-                SearchRepositoryViewModel.State(true, "123", repositories1, 0)
+                SearchRepositoryViewModel.State(true, "123", repositories1, 0, true)
             )
             .assertValueAt(
                 5,
-                SearchRepositoryViewModel.State(false, "123", repositories1, 0)
+                SearchRepositoryViewModel.State(false, "123", repositories1, 0, true)
             )
         eventsObservable
             .assertValueAt(0, SearchRepositoryViewModel.Event.FailedToLoadRepositories)

@@ -31,11 +31,11 @@ internal class RepositoryDataSourceImplTest {
     @Test
     fun `check insertNewRecentSearch`() {
         whenever(searchQueryDao.insert(SearchQueryEntity(0, "new", 0))) doReturn 0
-        whenever(searchQueryDao.getById(0)) doReturn SearchQueryEntity(0, "new", 0)
+        whenever(searchQueryDao.getByText("new")) doReturn SearchQueryEntity(0, "new", 0)
         val repo = getRepositoryDataSource()
         repo.insertNewRecentSearch("new")
         verify(searchQueryDao, times(1)).insert(any())
-        verify(searchQueryDao, times(1)).getById(any())
+        verify(searchQueryDao, times(1)).getByText(any())
         verifyZeroInteractions(repositoryDao, api)
     }
 
@@ -64,8 +64,8 @@ internal class RepositoryDataSourceImplTest {
         repo.search(SearchQuery(0, "123", 0), 0, 30, true)
             .test()
             .assertNoErrors()
-        verify(api, times(1)).search(eq("123"), eq(0), eq(15), any(), any())
         verify(api, times(1)).search(eq("123"), eq(1), eq(15), any(), any())
+        verify(api, times(1)).search(eq("123"), eq(2), eq(15), any(), any())
         verifyZeroInteractions(repositoryDao, searchQueryDao)
     }
 

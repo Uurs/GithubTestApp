@@ -13,16 +13,16 @@ internal class UserLoginUseCaseTest : BaseUseCaseTest() {
 
     @Test
     fun `positive flow`() = block<Dto> {
-        whenever(dataSource.login(any(), any())) doReturn Single.just(User("id", "", "", ""))
-        useCase.execute("name", "password")
+        whenever(dataSource.login(any())) doReturn Single.just(User(100, "id", "", ""))
+        useCase.execute("token")
             .test()
             .assertNoErrors()
     }
 
     @Test
     fun `negative flow`() = block<Dto> {
-        whenever(dataSource.login(any(), any())) doReturn Single.error(Exception())
-        useCase.execute("name", "password")
+        whenever(dataSource.login(any())) doReturn Single.error(Exception())
+        useCase.execute("token")
             .test()
             .assertError(Throwable::class.java)
     }
