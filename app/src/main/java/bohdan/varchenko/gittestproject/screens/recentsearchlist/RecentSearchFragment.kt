@@ -44,7 +44,7 @@ class RecentSearchFragment : BaseFragment<RecentSearchViewModel>() {
                 Launcher.launchSearchRepositoryActivity(requireContext(), event.query)
             RecentSearchViewModel.Event.StartNewSearch ->
                 Launcher.launchSearchRepositoryActivity(requireContext(), null)
-            RecentSearchViewModel.Event.FailedToLoadRecentSearch ->
+            RecentSearchViewModel.Event.FailedToLoadInitialData ->
                 showMessage(R.string.common_error_failed_to_make_request)
             RecentSearchViewModel.Event.CantInitNewSearch ->
                 showMessage(R.string.error_cant_init_new_search_need_auth)

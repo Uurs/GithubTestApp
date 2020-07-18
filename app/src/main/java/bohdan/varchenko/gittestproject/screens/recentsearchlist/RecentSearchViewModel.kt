@@ -35,7 +35,7 @@ class RecentSearchViewModel
                     val (user, list) = it
                     updateState { copy(list = list, user = user.data) }
                 },
-                { postEvent(Event.FailedToLoadRecentSearch) }
+                { postEvent(Event.FailedToLoadInitialData) }
             )
             .cache()
     }
@@ -61,6 +61,6 @@ class RecentSearchViewModel
         data class OpenRecentSearch(val query: SearchQuery) : Event()
         object CantInitNewSearch: Event()
         object StartNewSearch : Event()
-        object FailedToLoadRecentSearch : Event()
+        object FailedToLoadInitialData : Event()
     }
 }

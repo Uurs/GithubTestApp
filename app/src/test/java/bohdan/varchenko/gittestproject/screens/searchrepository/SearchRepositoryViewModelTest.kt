@@ -5,6 +5,7 @@ import bohdan.varchenko.domain.SearchConfig.SEARCH_RESULTS_PER_PAGE
 import bohdan.varchenko.domain.exceptions.NoInternetConnection
 import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.usecases.RepositoryUseCase
+import bohdan.varchenko.domain.usecases.UserUseCase
 import bohdan.varchenko.gittestproject.BaseViewModelTest
 import bohdan.varchenko.gittestproject.toObservableEvents
 import bohdan.varchenko.gittestproject.toObservableState
@@ -16,10 +17,12 @@ import org.junit.Test
 class SearchRepositoryViewModelTest : BaseViewModelTest() {
     private val searchUseCase: RepositoryUseCase.Search = mock()
     private val markAsViewedUseCase: RepositoryUseCase.MarkAsViewed = mock()
+    private val getCurrentUser: UserUseCase.GetCurrentUser = mock()
 
     private fun getViewModel(): SearchRepositoryViewModel = SearchRepositoryViewModel(
         searchUseCase = searchUseCase,
-        markAsViewedUseCase = markAsViewedUseCase
+        markAsViewedUseCase = markAsViewedUseCase,
+        getCurrentUser = getCurrentUser
     )
 
     @Test
