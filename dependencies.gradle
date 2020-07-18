@@ -29,6 +29,7 @@ final retrofitJacksonAdapter = "com.squareup.retrofit2:converter-jackson:${versi
 final okhttp3_okhttp_urlconnection = "com.squareup.okhttp3:okhttp-urlconnection:+"
 
 final jackson = "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
+final jackson_kotlin = "com.fasterxml.jackson.module:jackson-module-kotlin:${versions.jackson}"
 final androidx_core = "androidx.core:core-ktx:${versions.androidx_core}"
 final androidx_appcompat = "androidx.appcompat:appcompat:${versions.androidx_appcompat}"
 final android_arch_ext = "android.arch.lifecycle:extensions:${versions.android_arch_ext}"
@@ -58,6 +59,7 @@ ext {
             rxRetrofit,
             retrofitJacksonAdapter,
             jackson,
+            jackson_kotlin,
             inject,
             rxJava,
             androidx_room,

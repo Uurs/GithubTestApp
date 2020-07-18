@@ -18,7 +18,9 @@ fun <STATE> StatefulViewModel<STATE, *>.toObservableState(): Observable<STATE> {
         subscribeForState(lifecycleOwner) { emitter.onNext(it) }
     }
 
-}fun <EVENTS> StatefulViewModel<*, EVENTS>.toObservableEvents(): Observable<EVENTS> {
+}
+
+fun <EVENTS> StatefulViewModel<*, EVENTS>.toObservableEvents(): Observable<EVENTS> {
     return Observable.create { emitter ->
         val lifecycleOwner = mock<LifecycleOwner>()
         val lifecycle = LifecycleRegistry(lifecycleOwner)

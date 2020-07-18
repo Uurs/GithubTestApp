@@ -1,24 +1,19 @@
 package bohdan.varchenko.gittestproject.screens.searchrepository
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import bohdan.varchenko.domain.DataWrapper
 import bohdan.varchenko.domain.SearchConfig.SEARCH_RESULTS_PER_PAGE
 import bohdan.varchenko.domain.exceptions.NoInternetConnection
 import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.usecases.RepositoryUseCase
+import bohdan.varchenko.gittestproject.BaseViewModelTest
 import bohdan.varchenko.gittestproject.toObservableEvents
 import bohdan.varchenko.gittestproject.toObservableState
 import com.nhaarman.mockitokotlin2.*
-import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.plugins.RxJavaPlugins
-import io.reactivex.rxjava3.schedulers.Schedulers
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
-class SearchRepositoryViewModelTest {
+class SearchRepositoryViewModelTest : BaseViewModelTest() {
     private val searchUseCase: RepositoryUseCase.Search = mock()
     private val markAsViewedUseCase: RepositoryUseCase.MarkAsViewed = mock()
 
@@ -26,19 +21,6 @@ class SearchRepositoryViewModelTest {
         searchUseCase = searchUseCase,
         markAsViewedUseCase = markAsViewedUseCase
     )
-
-    @Rule
-    @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()
-
-    @Before
-    fun setup() {
-        RxAndroidPlugins.reset()
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
-        RxAndroidPlugins.setMainThreadSchedulerHandler { Schedulers.trampoline() }
-        RxJavaPlugins.reset()
-        RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
-    }
 
     @Test
     fun `check new search positive flow`() {

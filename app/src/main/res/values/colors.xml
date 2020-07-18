@@ -8,4 +8,5 @@
     <color name="white">#fff</color>
 
     <color name="icon_disabled">#acacac</color>
+    <color name="input_text_color">@color/colorPrimary</color>
 </resources>

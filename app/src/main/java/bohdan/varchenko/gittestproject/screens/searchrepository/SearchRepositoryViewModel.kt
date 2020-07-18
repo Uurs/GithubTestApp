@@ -3,6 +3,7 @@ package bohdan.varchenko.gittestproject.screens.searchrepository
 import bohdan.varchenko.domain.SearchConfig.SEARCH_RESULTS_PER_PAGE
 import bohdan.varchenko.domain.models.Repository
 import bohdan.varchenko.domain.usecases.RepositoryUseCase
+import bohdan.varchenko.domain.usecases.UserUseCase
 import bohdan.varchenko.gittestproject.base.StatefulViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -11,11 +12,20 @@ import javax.inject.Inject
 internal class SearchRepositoryViewModel
 @Inject constructor(
     private val searchUseCase: RepositoryUseCase.Search,
-    private val markAsViewedUseCase: RepositoryUseCase.MarkAsViewed
+    private val markAsViewedUseCase: RepositoryUseCase.MarkAsViewed,
+    getCurrentUser: UserUseCase.GetCurrentUser
 ) : StatefulViewModel<SearchRepositoryViewModel.State, SearchRepositoryViewModel.Event>() {
 
     init {
         putState(State(false, "", emptyList(), 0))
+        getCurrentUser.execute()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { updateState { copy(canInitSearch = it.isNotEmpty()) } },
+                { postEvent(Event.FailedToGetCurrentUser) }
+            )
+            .cache()
     }
 
     fun newSearch(searchText: String) {
@@ -73,7 +83,7 @@ internal class SearchRepositoryViewModel
                 {
                     if (it.error != null) {
                         postEvent(Event.FailedToLoadRepositories)
-                    }  else {
+                    } else {
                         updateState {
                             copy(
                                 list = list + (it.data ?: emptyList()),
@@ -91,12 +101,14 @@ internal class SearchRepositoryViewModel
         val loading: Boolean,
         val lastSearch: String,
         val list: List<Repository>,
-        val currentPage: Int
+        val currentPage: Int,
+        val canInitSearch: Boolean = false
     )
 
     sealed class Event {
         data class OpenRepositoryDetails(val repository: Repository) : Event()
         object FailedToLoadRepositories : Event()
-        object FailedToOpenRepository: Event()
+        object FailedToOpenRepository : Event()
+        object FailedToGetCurrentUser: Event()
     }
 }

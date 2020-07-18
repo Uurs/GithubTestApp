@@ -11,7 +11,7 @@ internal class UserLoginUseCase
     private val dataSource: UserDataSource
 ) : UserUseCase.Login {
 
-    override fun execute(login: String, password: String): Single<User> {
-        return dataSource.login(login, password)
+    override fun execute(password: String): Single<User> {
+        return dataSource.login(password)
     }
 }

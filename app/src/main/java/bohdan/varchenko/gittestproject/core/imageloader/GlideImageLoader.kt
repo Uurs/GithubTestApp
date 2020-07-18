@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class GlideImageLoader @Inject constructor(
     context: Context
-): ImageLoader {
+) : ImageLoader {
     private val glide = Glide.with(context)
 
     override fun loadImage(

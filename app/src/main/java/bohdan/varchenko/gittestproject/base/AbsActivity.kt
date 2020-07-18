@@ -6,7 +6,7 @@ import bohdan.varchenko.gittestproject.Application
 import bohdan.varchenko.gittestproject.core.imageloader.ImageLoader
 import bohdan.varchenko.gittestproject.di.AppComponent
 
-abstract class AbsActivity: AppCompatActivity() {
+abstract class AbsActivity : AppCompatActivity() {
     protected abstract val layoutResource: Int
     protected val imageLoader: ImageLoader by lazy {
         appComponent.getImageLoader()

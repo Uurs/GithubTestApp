@@ -39,6 +39,7 @@ internal class SearchRepositoryActivity : BaseActivity<SearchRepositoryViewModel
     }
 
     private fun renderState(state: SearchRepositoryViewModel.State) {
+        bSearch.isEnabled = state.canInitSearch
         if (etSearch.text?.isBlank() == true && state.lastSearch.isNotBlank()) {
             etSearch.setText(state.lastSearch)
         }

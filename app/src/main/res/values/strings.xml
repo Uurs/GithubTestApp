@@ -8,4 +8,13 @@
     <string name="common_message_something_went_wrong">Something went wrong</string>
     <string name="home_navigation_title_search">Search</string>
     <string name="screen_recent_search_button_new_search">New Search</string>
+    <string name="screen_profile_login_hint_title">You haven\'t signed in yet. Login to get ability to search repositories</string>
+    <string name="screen_profile_login_hint_details">To sign in, You need to create an AUTH Token in your github account. The AUTH Token should has a permission \'user\' to read your username and display avatar</string>
+    <string name="common_button_login">login</string>
+    <string name="common_button_logout">Logout</string>
+    <string name="screen_login_input_hint_login">Profile name</string>
+    <string name="screen_login_input_hint_password">AUTH Token</string>
+    <string name="screen_logout_title">Are you sure?</string>
+    <string name="common_error_failed_to_make_request">The Application got an error during request. Try again later or contact support</string>
+    <string name="error_cant_init_new_search_need_auth">To get ability make search need authorize first</string>
 </resources>

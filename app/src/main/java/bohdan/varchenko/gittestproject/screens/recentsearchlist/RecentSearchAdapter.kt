@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.item_recent_search.view.*
 
 class RecentSearchAdapter(
     private val itemClickListener: (SearchQuery) -> Unit
-): RecyclerView.Adapter<RecentSearchAdapter.RecentSearchViewHolder>() {
+) : RecyclerView.Adapter<RecentSearchAdapter.RecentSearchViewHolder>() {
     var recentSearchList: List<SearchQuery> = emptyList()
         set(value) {
             if (field != value) {

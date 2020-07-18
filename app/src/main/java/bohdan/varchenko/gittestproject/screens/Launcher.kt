@@ -17,7 +17,7 @@ object Launcher {
     fun launchSearchRepositoryActivity(
         context: Context,
         query: SearchQuery?
-    ){
+    ) {
         context.startActivity(SearchRepositoryActivity.getIntent(context, query))
     }
 }

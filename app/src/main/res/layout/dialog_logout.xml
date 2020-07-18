@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="128dp"
+    android:layout_gravity="center"
+    android:layout_margin="16dp"
+    android:background="@drawable/bg_rounded_white"
+    android:elevation="4dp"
+    android:padding="16dp">
+
+    <TextView
+        style="@style/Text.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:text="@string/screen_logout_title" />
+
+    <Button
+        android:id="@+id/bLogout"
+        style="@style/Button"
+        android:layout_width="128dp"
+        android:layout_gravity="bottom|end"
+        android:text="@android:string/ok" />
+
+    <Button
+        android:id="@+id/bCancel"
+        style="@style/Button"
+        android:layout_width="128dp"
+        android:layout_gravity="bottom|start"
+        android:text="@android:string/cancel" />
+
+</FrameLayout>

@@ -1,6 +1,7 @@
 package bohdan.varchenko.data.repositories
 
 import bohdan.varchenko.data.local.UserStorage
+import bohdan.varchenko.data.mappers.toUser
 import bohdan.varchenko.data.remote.UserApi
 import bohdan.varchenko.domain.datasource.UserDataSource
 import bohdan.varchenko.domain.exceptions.NotAuthorizedException
@@ -15,8 +16,9 @@ internal class UserDataSourceImpl
     private val userStorage: UserStorage
 ) : UserDataSource {
 
-    override fun login(name: String, password: String): Single<User> {
-        return userApi.login(name, password)
+    override fun login(token: String): Single<User> {
+        return userApi.login(prepareTokenForRequest(token))
+            .map { it.toUser(token) }
             .doOnSuccess { userStorage.storeUser(it) }
     }
 
@@ -31,4 +33,6 @@ internal class UserDataSourceImpl
             userStorage.getUser() ?: throw NotAuthorizedException()
         }
     }
+
+    private fun prepareTokenForRequest(token: String): String = "token $token"
 }

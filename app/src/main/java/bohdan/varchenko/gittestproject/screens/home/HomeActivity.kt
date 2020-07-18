@@ -33,24 +33,10 @@ internal class HomeActivity : AbsActivity() {
         showScreen(ProfileFragment::class.java)
     }
 
-    private fun initFragments() {
-        supportFragmentManager.beginTransaction()
-            .add(R.id.flContent, RecentSearchFragment())
-            .add(R.id.flContent, ProfileFragment())
-            .commit()
-    }
-
     private fun showScreen(fragment: Class<out BaseFragment<*>>) {
-        supportFragmentManager.fragments.find { it::class.java == fragment }
-            ?.run {
-                supportFragmentManager.beginTransaction()
-                    .show(this)
-                    .commit()
-            }
-            ?: run {
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.flContent, fragment.newInstance())
-                    .commit()
-            }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.flContent, fragment.newInstance())
+            .commit()
+
     }
 }

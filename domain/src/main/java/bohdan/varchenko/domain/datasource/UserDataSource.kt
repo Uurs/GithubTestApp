@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 
 interface UserDataSource {
-    fun login(name: String, password: String): Single<User>
+    fun login(token: String): Single<User>
 
     fun logout(): Completable
 

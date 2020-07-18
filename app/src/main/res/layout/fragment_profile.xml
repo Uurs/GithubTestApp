@@ -1,6 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/llLoginHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/Text.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/screen_profile_login_hint_title" />
+
+        <TextView
+            style="@style/Text.Hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/screen_profile_login_hint_details" />
+
+        <Button
+            android:id="@+id/bLogin"
+            style="@style/Button"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/common_button_login" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/ivProfileAvatar"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:contentDescription="@string/common_image_content_description_author_avatar" />
+
+        <TextView
+            android:id="@+id/tvProfileName"
+            style="@style/Text.Title"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/bLogout"
+            style="@style/Button"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:text="@string/common_button_logout" />
+
+    </LinearLayout>
+</FrameLayout>

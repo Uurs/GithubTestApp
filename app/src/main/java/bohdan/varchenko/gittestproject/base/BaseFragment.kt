@@ -10,7 +10,7 @@ import bohdan.varchenko.gittestproject.Application
 import bohdan.varchenko.gittestproject.core.imageloader.ImageLoader
 import bohdan.varchenko.gittestproject.di.AppComponent
 
-abstract class BaseFragment<ViewModel: StatefulViewModel<*, *>>: Fragment() {
+abstract class BaseFragment<ViewModel : StatefulViewModel<*, *>> : Fragment() {
 
     protected lateinit var viewModel: ViewModel
     protected abstract val layoutResource: Int

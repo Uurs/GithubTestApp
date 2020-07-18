@@ -2,6 +2,7 @@ package bohdan.varchenko.gittestproject.screens.recentsearchlist
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import bohdan.varchenko.gittestproject.R
 import bohdan.varchenko.gittestproject.base.BaseFragment
 import bohdan.varchenko.gittestproject.screens.Launcher
@@ -23,8 +24,8 @@ class RecentSearchFragment : BaseFragment<RecentSearchViewModel>() {
         viewModel.subscribeForEvents(this) { onEvent(it) }
         btnInitNewSearch.setOnClickListener { viewModel.initNewSearch() }
         adapter = RecentSearchAdapter {
-                viewModel.openRecentSearch(it)
-            }
+            viewModel.openRecentSearch(it)
+        }
         rvRecentSearch.adapter = adapter
     }
 
@@ -43,7 +44,14 @@ class RecentSearchFragment : BaseFragment<RecentSearchViewModel>() {
                 Launcher.launchSearchRepositoryActivity(requireContext(), event.query)
             RecentSearchViewModel.Event.StartNewSearch ->
                 Launcher.launchSearchRepositoryActivity(requireContext(), null)
-            RecentSearchViewModel.Event.FailedToLoadRecentSearch -> TODO()
+            RecentSearchViewModel.Event.FailedToLoadRecentSearch ->
+                showMessage(R.string.common_error_failed_to_make_request)
+            RecentSearchViewModel.Event.CantInitNewSearch ->
+                showMessage(R.string.error_cant_init_new_search_need_auth)
         }
+    }
+
+    private fun showMessage(messageStringRes: Int) {
+        Toast.makeText(requireContext(), messageStringRes, Toast.LENGTH_SHORT).show()
     }
 }
